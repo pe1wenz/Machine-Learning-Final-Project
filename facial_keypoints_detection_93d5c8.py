@@ -5,7 +5,8 @@ import os
 import matplotlib.pyplot as plt
 from keras.layers.advanced_activations import ReLU
 from keras.models import Sequential, Model
-from keras.layers import Activation, Convolution2D, MaxPooling2D, Flatten, Dense, Dropout, Conv2D,MaxPool2D
+from keras.layers import Activation, Convolution2D, MaxPooling2D
+from keras.layers import Flatten, Dense, Dropout, Conv2D,MaxPool2D
 
 # io reading
 train_data = pd.read_csv('./training.csv',header=0, sep=',', quotechar='"')

@@ -1,3 +1,4 @@
+# imports
 import numpy as np 
 import pandas as pd 
 import os
@@ -6,20 +7,21 @@ from keras.layers.advanced_activations import ReLU
 from keras.models import Sequential, Model
 from keras.layers import Activation, Convolution2D, MaxPooling2D, Flatten, Dense, Dropout, Conv2D,MaxPool2D
 
-
+# io reading
 train_data = pd.read_csv('./training.csv',header=0, sep=',', quotechar='"')
 test_data = pd.read_csv('./test.csv', header=0, sep=',', quotechar='"')
 IdLookupTable = pd.read_csv('./IdLookupTable.csv',header=0, sep=',', quotechar='"')
 train_data.fillna(method = 'ffill',inplace = True)
 
 
-Vis = []
+# get x-train and y-train
+trainimg = []
 
 for i in range(len(train_data)):
-  Vis.append(train_data['Image'][i].split(' '))
+  trainimg.append(train_data['Image'][i].split(' '))
 
 
-array_float = np.array(Vis, dtype='float')
+array_float = np.array(trainimg, dtype='float')
 X_train = array_float.reshape(-1,96,96,1)
 
 
@@ -56,6 +58,7 @@ plt.scatter(photo_visualize_pnts[0::2], photo_visualize_pnts[1::2], c='Pink', ma
 plt.title("Image with Facial Keypoints")
 plt.show()
 
+# build CNN structures
 
 model = Sequential()
 
@@ -89,7 +92,7 @@ model.compile(optimizer='adam',
               loss='mean_squared_error',
               metrics=['accuracy'])
 
-
+# training
 model.fit(X_train,y_train,epochs = 25,batch_size=32,validation_split = 0.2)
 
 
@@ -101,7 +104,7 @@ for i in range(len(test_data)):
 array_float_test = np.array(test_images,dtype = 'float')
 X_test = array_float_test.reshape(-1,96,96,1)
 
-
+# predict
 predict = model.predict(X_test)
 print(predict)
 
@@ -128,6 +131,7 @@ Location = pd.Series(Data_Pre,name = 'Location')
 submission = pd.concat([RowId,Location],axis = 1)
 submission.to_csv('./Submit.csv',index=False)
 
+# show test images and predictions.
 testvis = []
 
 for i in range(len(test_data)):
